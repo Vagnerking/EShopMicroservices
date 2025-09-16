@@ -10,18 +10,12 @@
             {
                 var query = new GetProductByIdQuery(id);
                 var result = await sender.Send(query, cancellationToken);
-
-                if(result is null)
-                {
-                    return Results.NotFound(result.Adapt<ProductNotFoundException>());
-                }
-
                 var response = result.Adapt<GetProductByIdResponse>();
                 return Results.Ok(response);
             })
             .WithName("GetProductById")
             .Produces<GetProductByIdResponse>(StatusCodes.Status200OK)
-            .ProducesProblem(StatusCodes.Status404NotFound)
+            .ProducesProblem(StatusCodes.Status400BadRequest)
             .WithSummary("Get Product By Id")
             .WithDescription("Get Product By Id");
         }
